@@ -14,10 +14,14 @@ const text =
 function answer(text, keywordsObject) {
   for (const property in keywordsObject) {
     let pattern = property.toString();
-    text = text.replace(
-      new RegExp(pattern, "g"),
-      property + keywordsObject[property]
-    );
+    const outerSpan = document.createElement("span");
+    const innerSpan = document.createElement("span");
+    innerSpan.setAttribute("id", "innerSpan");
+    outerSpan.setAttribute("id", "outerSpan");
+    outerSpan.innerHTML = property.toString();
+    innerSpan.innerHTML = keywordsObject[property];
+    outerSpan.appendChild(innerSpan);
+    text = text.replace(new RegExp(pattern, "g"), outerSpan.outerHTML);
   }
   return text;
 }
@@ -28,10 +32,5 @@ console.log(answer(text, keywordsObject));
 
 const getElementId = document.getElementById("text-highlight");
 const createParagraphElement = document.createElement("p");
-const outerSpan = document.createElement("span");
-const innerSpan = document.createElement("span");
-innerSpan.setAttribute("id", "innerSpan");
-outerSpan.setAttribute("id", "outerSpan");
-outerSpan.appendChild(innerSpan);
 createParagraphElement.innerHTML = highlightedText;
 getElementId.append(createParagraphElement);
